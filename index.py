@@ -5,6 +5,7 @@ from ouimeaux.signals import receiver, statechange
 def on_connect(client, userdata, rc):
 	print('Connected with result code '+str(rc))
 	client.subscribe('lights/#')
+	client.subscribe('devices/discover')
 
 def turn_lights_on(client, userdata, rc):
 	for (x, value) in enumerate(devices['switches']):
@@ -15,10 +16,11 @@ def turn_lights_off(client, userdata, rc):
 		devices['switches'][x].off()
 
 def reply_with_devices(client, userdata, rc):
-	for (x, value) in enumerate(devices['switches']):
-		client.publish('devices/new', '{{ "name": "{0}", "type": "light", "subType": "wemo_light" "state": "{1}" }}'.format(switches[x],switches[x].get_state())
-	for (x, value) in enumerate(devices['motions']):
-		client.publish('devices/new', '{{ "name": "{0}", "type": "sensor", "subType": "motion_sensor" "state": "{1}" }}'.format(motions[x],motions[x].get_state())
+	print 'Send all devices in response to devices/discover'
+	for (x, device) in enumerate(devices['switches']):
+		client.publish('devices/new', '{{ "name": "{0}", "type": "light", "subType": "wemo_light" "state": "{1}" }}'.format(device.name,device.get_state()))
+	for (x, device) in enumerate(devices['motions']):
+		client.publish('devices/new', '{{ "name": "{0}", "type": "sensor", "subType": "motion_sensor" "state": "{1}" }}'.format(device.name,device.get_state()))
 
 def on_switch(switch):
 	print "Switch found: ", switch.name
@@ -51,6 +53,6 @@ def motion(sender, **kwargs):
 	print 'A THING HAPPENED'
 	print "{} state is {state}".format(sender.name, state="on" if kwargs.get('state') else "off")
 
-env.wait()
+client.loop_start()
 
-client.loop_forever()
+env.wait()
