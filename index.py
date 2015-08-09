@@ -18,9 +18,9 @@ def turn_lights_off(client, userdata, rc):
 def reply_with_devices(client, userdata, rc):
 	print 'Send all devices in response to devices/discover'
 	for (x, device) in enumerate(devices['switches']):
-		client.publish('devices/new', '{{ "name": "{0}", "type": "light", "subType": "wemo_light" "state": "{1}" }}'.format(device.name,device.get_state()))
+		client.publish('devices/new', '{{ "name": "{0}", "type": "light", "subType": "wemo_light", "state": "{1}" }}'.format(device.name,device.get_state()))
 	for (x, device) in enumerate(devices['motions']):
-		client.publish('devices/new', '{{ "name": "{0}", "type": "sensor", "subType": "motion_sensor" "state": "{1}" }}'.format(device.name,device.get_state()))
+		client.publish('devices/new', '{{ "name": "{0}", "type": "sensor", "subType": "motion_sensor", "state": "{1}" }}'.format(device.name,device.get_state()))
 
 def on_switch(switch):
 	print "Switch found: ", switch.name
