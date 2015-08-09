@@ -36,7 +36,7 @@ client.message_callback_add('lights/on', turn_lights_on)
 client.message_callback_add('lights/off', turn_lights_off)
 client.message_callback_add('devices/discover', reply_with_devices)
 
-client.connect('localhost', 1883, 60)
+client.connect('192.168.1.74', 1883, 60)
 
 print 'Running WEMO controller - listening for messages on localhost:1883'
 
