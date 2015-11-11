@@ -36,17 +36,21 @@ client.message_callback_add('lights/on', turn_lights_on)
 client.message_callback_add('lights/off', turn_lights_off)
 client.message_callback_add('devices/discover', reply_with_devices)
 
-client.connect('192.168.1.74', 1883, 60)
+client.connect('192.168.0.11', 1883, 60)
 
 print 'Running WEMO controller - listening for messages on localhost:1883'
 
 devices = { 'switches': [], 'motions': [] }
 
+print "start"
 env = Environment(on_switch, on_motion)
+print "got env"
 env.start()
+print "middle"
 env.discover(seconds=3)
-
-switch = env.get_switch('Desk lights')
+print env.list_switches()
+print env.list_motions()
+print "LISTED"
 
 @receiver(statechange)
 def motion(sender, **kwargs):
